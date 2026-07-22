@@ -142,13 +142,13 @@
 						return showMessage(`Error : ${message}`, true);
 					}
 
-					throw new Error(`Erreur HTTP : ${response.status}`);
+					throw new Error(`Error HTTP : ${response.status}`);
 				}
 
 				const text = await response.text();
 				processTLE(text);
 			} catch (err) {
-				showMessage(`Erreur lors du téléchargement : ${err.message}. (Note : les navigateurs bloquent souvent les requêtes directes à cause du CORS).`, true);
+				showMessage(`Error : ${err.message}. ().`, true);
 			}
 		}
 
