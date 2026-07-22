@@ -6,6 +6,10 @@ This web tool updates your [PocketSat+](https://palmdb.net/app/pocketsat) app wi
  - Click Generate PDB file.  
  - Transfer the downloaded file to your Palm Pilot via HotSync or an SD card
 
+## Video tutorial : 
+
+https://www.youtube.com/watch?v=gtG2pQ8sYCk
+
 ## Notes: 
 
 The CelesTrak API may block repeated requests in a short time frame. If this happens, an error message will appear directly in the application.
