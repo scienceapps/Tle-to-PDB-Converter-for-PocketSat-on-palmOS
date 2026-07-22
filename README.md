@@ -5,3 +5,7 @@ This web tool updates your PocketSat+ app with the latest satellite orbits. It c
  - Pick a satellite list from the menu (100 Brightest, weather, communications, navigation satellites) 
  - Click Generate PDB file.  
  - Transfer the downloaded file to your Palm Pilot via HotSync or an SD card
+
+##Note: 
+
+The CelesTrak API may block repeated requests in a short time frame. If this happens, an error message will appear directly in the application.
