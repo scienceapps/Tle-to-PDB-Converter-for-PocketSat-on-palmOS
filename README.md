@@ -1,7 +1,7 @@
 # TLE to PDB Converter for PocketSat on palmOS
 This web tool updates your [PocketSat+](https://palmdb.net/app/pocketsat) app with the latest satellite orbits. It converts live space data from [Celestrak](https://celestrak.org/NORAD/elements/index.php?FORMAT=tle) website directly in your browser so you can load it onto your Palm.
 
-[Application](https://scienceapps.github.io/Tle-to-PDB-Converter-for-PocketSat-on-palmOS/)
+>> [TLE to PDB Converter for PocketSat on palmOS](https://scienceapps.github.io/Tle-to-PDB-Converter-for-PocketSat-on-palmOS/)
 
 ## How to use it ?
  - Pick a satellite list from the menu (100 Brightest, weather, communications, navigation satellites) 
@@ -10,7 +10,7 @@ This web tool updates your [PocketSat+](https://palmdb.net/app/pocketsat) app wi
 
 ## Video tutorial : 
 
-[Watch video](https://www.youtube.com/watch?v=gtG2pQ8sYCk){:target="_blank"}
+[Watch video](https://www.youtube.com/watch?v=gtG2pQ8sYCk)
 
 ## Notes: 
 
