@@ -6,6 +6,8 @@ This web tool updates your PocketSat+ app with the latest satellite orbits. It c
  - Click Generate PDB file.  
  - Transfer the downloaded file to your Palm Pilot via HotSync or an SD card
 
-##Note: 
+## Notes: 
 
 The CelesTrak API may block repeated requests in a short time frame. If this happens, an error message will appear directly in the application.
+
+This project is a JavaScript port of a command-line script whose C source code is available in this repository.
