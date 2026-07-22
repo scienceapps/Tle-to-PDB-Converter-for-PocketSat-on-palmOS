@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TLE to PDB converter for PocketSat+ for palmOS</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 { font-size: 1.5rem; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 0.5rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; font-weight: bold; margin-bottom: 0.5rem; }
+        input[type="text"], input[type="url"], select {
+            width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit;
+        }
+        select { background-color: white; cursor: pointer; }
+        button {
+            background-color: #3498db; color: white; border: none; padding: 0.75rem 1.5rem;
+            border-radius: 4px; cursor: pointer; font-size: 1rem; width: 100%;
+        }
+        button:hover { background-color: #2980b9; }
+        .alert { padding: 1rem; margin-top: 1rem; border-radius: 4px; display: none; }
+        .alert.error { background-color: #fee; color: #c0392b; border: 1px solid #fcc; display: block; }
+        .alert.success { background-color: #e8f8f5; color: #27ae60; border: 1px solid #c2ebd7; display: block; }
+        .divider { text-align: center; margin: 1.5rem 0; color: #888; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <h1>TLE to PDB converter for <a href="https://palmdb.net/app/pocketsat" target=_blank>PocketSat+ for palmOS</a></h1>
+    
+    <div class="form-group">
+        <label for="dbName">Database name :</label>
+        <input type="text" id="dbName" value="Satellites" maxlength="31">
+    </div>
+
+    <div class="form-group">
+        <label for="tlePreset">Fetch data from <a href="https://celestrak.org/NORAD/elements/index.php?FORMAT=tle" target=_blank>CelesTrak website</a></label>
+        <select id="tlePreset" onchange="document.getElementById('tleUrl').value = this.value;">
+            <optgroup label="Special-Interest Satellites">
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=last-30-days&FORMAT=tle">Last 30 Days' Launches</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=stations&FORMAT=tle">Space Stations</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=tle" selected>100 (or so) Brightest</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=analyst&FORMAT=tle">Analyst Satellites</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=fengyun-1c-debris&FORMAT=tle">Chinese ASAT Test Debris (FENGYUN 1C)</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=iridium-33-debris&FORMAT=tle">IRIDIUM 33 Debris</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=cosmos-2251-debris&FORMAT=tle">COSMOS 2251 Debris</option>
+            </optgroup>
+            <optgroup label="Weather & Earth Resources Satellites">
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=weather&FORMAT=tle">Weather</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=resource&FORMAT=tle">Earth Resources</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=sar&FORMAT=tle">Synthetic Aperture Radar</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=sarsat&FORMAT=tle">Search & Rescue (SARSAT)</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=dmc&FORMAT=tle">Disaster Monitoring</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=tdrss&FORMAT=tle">Tracking and Data Relay Satellite System (TDRSS)</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=argos&FORMAT=tle">ARGOS Data Collection System</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=planet&FORMAT=tle">Planet</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=spire&FORMAT=tle">Spire</option>
+            </optgroup>
+            <optgroup label="Communications Satellites">
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=geo&FORMAT=tle">Active Geosynchronous</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?SPECIAL=gpz&FORMAT=tle">GEO Protected Zone</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?SPECIAL=gpz-plus&FORMAT=tle">GEO Protected Zone Plus</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=intelsat&FORMAT=tle">Intelsat</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=ses&FORMAT=tle">SES</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=eutelsat&FORMAT=tle">Eutelsat</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=telesat&FORMAT=tle">Telesat</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=starlink&FORMAT=tle">Starlink</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=oneweb&FORMAT=tle">OneWeb</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=qianfan&FORMAT=tle">Qianfan</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=hulianwang&FORMAT=tle">Hulianwang Digui</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=kuiper&FORMAT=tle">Kuiper</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=iridium-NEXT&FORMAT=tle">Iridium NEXT</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=orbcomm&FORMAT=tle">Orbcomm</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=globalstar&FORMAT=tle">Globalstar</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=amateur&FORMAT=tle">Amateur Radio</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=satnogs&FORMAT=tle">SatNOGS</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=x-comm&FORMAT=tle">Experimental Comm</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=other-comm&FORMAT=tle">Other Comm</option>
+            </optgroup>
+            <optgroup label="Navigation Satellites">
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=gnss&FORMAT=tle">GNSS</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=gps-ops&FORMAT=tle">GPS Operational</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=glo-ops&FORMAT=tle">GLONASS Operational</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=galileo&FORMAT=tle">Galileo</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=beidou&FORMAT=tle">Beidou</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=sbas&FORMAT=tle">Satellite-Based Augmentation System</option>
+            </optgroup>
+            <optgroup label="Scientific & Miscellaneous Satellites">
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=science&FORMAT=tle">Space & Earth Science</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=geodetic&FORMAT=tle">Geodetic</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=engineering&FORMAT=tle">Engineering</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=education&FORMAT=tle">Education</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=military&FORMAT=tle">Miscellaneous Military</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=radar&FORMAT=tle">Radar Calibration</option>
+                <option value="https://celestrak.org/NORAD/elements/gp.php?GROUP=cubesat&FORMAT=tle">CubeSats</option>
+            </optgroup>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="tleUrl">Link to the TLE file (.txt) :</label>
+        <input type="url" id="tleUrl" value="https://celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=tle">
+    </div>
+    
+    <button onclick="generateFromUrl()">Generate PDB file</button>
+    <div id="messageBox" class="alert"></div>
+
+	<br/><br/><br/>
+    <center>Scienceapps 2026</center>
+
+    <script>
+        const MAX_RECS = 3000;
+        
+        function showMessage(msg, isError = false) {
+            const box = document.getElementById('messageBox');
+            box.textContent = msg;
+            box.className = 'alert ' + (isError ? 'error' : 'success');
+        }
+
+		async function generateFromUrl() {
+			const url = document.getElementById('tleUrl').value;
+			if (!url) return showMessage('Veuillez entrer une URL valide.', true);
+
+			try {
+				const response = await fetch(url);
+
+				if (!response.ok) {
+					// Traitement spécifique de l'erreur 403
+					if (response.status === 403) {
+						const apiError = await response.text(); // Utilisez .json() si l'API renvoie du JSON
+						const message = apiError.trim() || 'Accès refusé : vous n\'avez pas les autorisations nécessaires.';
+						return showMessage(`Erreur 403 : ${message}`, true);
+					}
+
+					throw new Error(`Erreur HTTP : ${response.status}`);
+				}
+
+				const text = await response.text();
+				processTLE(text);
+			} catch (err) {
+				showMessage(`Erreur lors du téléchargement : ${err.message}. (Note : les navigateurs bloquent souvent les requêtes directes à cause du CORS).`, true);
+			}
+		}
+
+
+        function processTLE(text) {
+            let dbName = document.getElementById('dbName').value || 'NewSatellites';
+            
+            // Simuler le comportement de `fgets` qui lit ligne par ligne en gardant les retours à la ligne
+            let lines = text.match(/[^\r\n]+[\r\n]+/g) || [];
+            
+            // Capturer la dernière ligne si elle ne se termine pas par un retour à la ligne
+            const lastMatch = text.match(/[^\r\n]+$/);
+            if (lastMatch) lines.push(lastMatch[0]);
+
+            // Troncature de sécurité (MAX_RECS)
+            if (lines.length > MAX_RECS) {
+                lines = lines.slice(0, MAX_RECS);
+                console.warn("Trop d'enregistrements. Données tronquées.");
+            }
+
+            const numRec = lines.length;
+            const headerSize = 78; // Taille fixe de PDBHeader
+            const recordListSize = 8 * numRec; // 8 octets par RecordListEntry
+            let dataSize = 0;
+
+            const encoder = new TextEncoder();
+            const encodedLines = lines.map(line => {
+                const encoded = encoder.encode(line);
+                dataSize += encoded.length; // strlen equivalent (sans null terminator)
+                return encoded;
+            });
+
+            const totalSize = headerSize + recordListSize + dataSize;
+            const buffer = new ArrayBuffer(totalSize);
+            const view = new DataView(buffer);
+            const uint8View = new Uint8Array(buffer);
+
+            // --- 1. EN-TÊTE PDB (PDBHeader) ---
+            
+            // Nom (32 octets max, le reste est à 0 via l'initialisation du buffer)
+            const nameBytes = encoder.encode(dbName.substring(0, 31));
+            uint8View.set(nameBytes, 0); 
+
+            view.setUint16(32, 0, false); // attr = 0 (false = Big-Endian)
+            view.setUint16(34, 1, false); // version = 1
+
+            // Dates (secondes depuis le 1er janvier 1970, conversion PalmSecsNow)
+            const nowSecs = Math.floor(Date.now() / 1000);
+            view.setUint32(36, nowSecs, false); // cdate
+            view.setUint32(40, nowSecs, false); // mdate
+            view.setUint32(44, 0, false);       // bdate
+            view.setUint32(48, 0, false);       // modNum
+            view.setUint32(52, 0, false);       // appInfoOffset
+            view.setUint32(56, 0, false);       // sortInfoOffset
+
+            // dbType et creatorID
+            uint8View.set(encoder.encode('iTLE'), 60); // DB_TYPE
+            uint8View.set(encoder.encode('pSat'), 64); // CREATOR_ID
+
+            view.setUint32(68, 0, false);       // idSeed
+            view.setUint32(72, 0, false);       // nextRecListID
+            view.setUint16(76, numRec, false);  // numRec
+
+            // --- 2. LISTE DES ENREGISTREMENTS (RecordListEntry) ---
+            
+            let listOffset = 78;
+            let currentDataLoc = headerSize + recordListSize; // dataLoc initial
+
+            for (let i = 0; i < numRec; i++) {
+                view.setUint32(listOffset, currentDataLoc, false); // recOffset
+                // Les 4 octets suivants (attrAndID) restent à 0 par défaut
+                listOffset += 8;
+                currentDataLoc += encodedLines[i].length;
+            }
+
+            // --- 3. DONNÉES BRUTES ---
+            
+            let writeOffset = headerSize + recordListSize;
+            for (let i = 0; i < numRec; i++) {
+                uint8View.set(encodedLines[i], writeOffset);
+                writeOffset += encodedLines[i].length;
+            }
+
+            // --- 4. TÉLÉCHARGEMENT DU FICHIER ---
+            
+            const blob = new Blob([buffer], { type: 'application/octet-stream' });
+            const downloadUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = dbName + '.pdb';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(downloadUrl);
+
+            showMessage(`Succès ! ${dbName}.pdb generated containing ${numRec} records. You can now hotsync your Palm, or copy this file to a memory card and use Resco Explorer to install it.`);
+        }
+    </script>
+</body>
+</html>
