@@ -8,7 +8,7 @@ This web tool updates your [PocketSat+](https://palmdb.net/app/pocketsat) app wi
 
 ## Video tutorial : 
 
-https://www.youtube.com/watch?v=gtG2pQ8sYCk
+[![Regarder la vidéo](https://img.youtube.com/vi/gtG2pQ8sYCk/hqdefault.jpg)](https://www.youtube.com/watch?v=gtG2pQ8sYCk)
 
 ## Notes: 
 
